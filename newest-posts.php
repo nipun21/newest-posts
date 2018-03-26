@@ -16,29 +16,29 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @return void
  */
-function np_register_widget_style() {
+function new_post_register_widget_style() {
 	wp_register_style( 'np-widget', plugins_url( 'np-widget/np-style.css' ) );
 	wp_enqueue_style( 'np-widget' );
 }
 
-add_action( 'wp_enqueue_scripts', 'np_register_widget_style' );
+add_action( 'wp_enqueue_scripts', 'new_post_register_widget_style' );
 
 /**
  * Register thumbnail size.
  *
  * @return void
  */
-function np_add_image_size() {
-	$sizes = get_option( 'mkrdip_np_thumb_sizes' );
+function new_post_add_image_size() {
+	$sizes = get_option( 'mkrdip_new_post_thumb_sizes' );
 
 	if ( $sizes ) {
 		foreach ( $sizes as $id => $size ) {
-			add_image_size( 'np_thumb_size' . $id, $size[0], $size[1], true );
+			add_image_size( 'new_post_thumb_size' . $id, $size[0], $size[1], true );
 		}
 	}
 }
 
-add_action( 'init', 'np_add_image_size' );
+add_action( 'init', 'new_post_add_image_size' );
 
 
 /**
@@ -59,7 +59,7 @@ class NP_Widget extends WP_Widget {
 
 		extract( $args );
 
-		$sizes = get_option( 'mkrdip_np_thumb_sizes' );
+		$sizes = get_option( 'mkrdip_new_post_thumb_sizes' );
 
 		$valid_sort_orders = array( 'date', 'title', 'comment_count', 'rand' );
 		if ( in_array( $instance['sort_by'], $valid_sort_orders ) ) {
@@ -110,7 +110,7 @@ class NP_Widget extends WP_Widget {
 
 				<?php if ( current_theme_supports( "post-thumbnails" ) && isset( $instance["thumb"] ) && has_post_thumbnail() ) : ?>
 					<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-						<?php the_post_thumbnail( 'np_thumb_size' . $this->id ); ?>
+						<?php the_post_thumbnail( 'new_post_thumb_size' . $this->id ); ?>
 					</a>
 				<?php endif; ?>
 
@@ -142,15 +142,13 @@ class NP_Widget extends WP_Widget {
 	 * @return array
 	 */
 	function update( $new_instance, $old_instance ) {
-		$sizes = get_option( 'mkrdip_np_thumb_sizes' );
+		$sizes = get_option( 'mkrdip_new_post_thumb_sizes' );
 
 		if ( !$sizes ) {
 			$sizes = array( );
 		}
-
 		$sizes[$this->id] = array( $new_instance['thumb_w'], $new_instance['thumb_h'] );
-		update_option( 'mkrdip_np_thumb_sizes', $sizes );
-
+		update_option( 'mkrdip_new_post_thumb_sizes', $sizes );
 		return $new_instance;
 	}
 
@@ -198,7 +196,7 @@ class NP_Widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( "num" ); ?>">
 				<?php _e( 'Number of posts to show' ); ?>:
-				<input style="text-align: center;" id="<?php echo $this->get_field_id( "num" ); ?>" name="<?php echo $this->get_field_name( "num" ); ?>" type="text" value="<?php echo absint( $instance["num"] ); ?>" size='3' />
+				<input style="text-align: center;" id=" <?php echo $this->get_field_id( "num" ); ?> " name="<?php echo $this->get_field_name( "num" ); ?>" type="text" value="<?php echo absint( $instance["num"] ); ?>" size='3' />
 			</label>
 		</p>
 
